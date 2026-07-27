@@ -1,0 +1,3 @@
+speech/.venv/
+**/__pycache__/
+*.pyc
