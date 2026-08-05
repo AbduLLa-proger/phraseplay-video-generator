@@ -1,0 +1,37 @@
+[
+  {
+    "word": "She",
+    "start": 0.392,
+    "end": 0.513
+  },
+  {
+    "word": "asked",
+    "start": 0.653,
+    "end": 0.834
+  },
+  {
+    "word": "me",
+    "start": 0.874,
+    "end": 0.955
+  },
+  {
+    "word": "not",
+    "start": 0.995,
+    "end": 1.176
+  },
+  {
+    "word": "to",
+    "start": 1.216,
+    "end": 1.276
+  },
+  {
+    "word": "tell",
+    "start": 1.336,
+    "end": 1.517
+  },
+  {
+    "word": "anyone.",
+    "start": 1.617,
+    "end": 1.959
+  }
+]
