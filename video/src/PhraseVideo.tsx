@@ -1,12 +1,10 @@
 import { Series, useVideoConfig } from "remotion";
 import scenes from "../public/data/scenes.json";
 import { PhraseScene } from "./components/PhraseScene";
+import { getSceneDurationFrames } from "./utils/get-scene-duration";
 import {
   introWords,
   introWordTimings,
-  INTRO_PAUSE_SECONDS,
-  ANSWER_HOLD_SECONDS,
-  COUNTDOWN_NUMBERS,
   SILENCE_SECONDS,
 } from "./constants/phrase-video";
 
@@ -15,22 +13,14 @@ export const PhraseVideo = () => {
   return (
     <Series>
       {scenes.map((scene, index) => {
-        const introDuration = introWordTimings.at(-1)?.end ?? 0;
-        const russianDuration = scene.russianWordTimings.at(-1)?.end ?? 0;
-        const englishDuration = scene.englishWordTimings.at(-1)?.end ?? 0;
-
         const initialPause = index === 0 ? SILENCE_SECONDS : 0;
 
-        const sceneDurationSeconds =
-          initialPause +
-          introDuration +
-          INTRO_PAUSE_SECONDS +
-          russianDuration +
-          COUNTDOWN_NUMBERS.length +
-          englishDuration +
-          ANSWER_HOLD_SECONDS;
-
-        const sceneDurationFrames = Math.ceil(sceneDurationSeconds * fps);
+        const sceneDurationFrames = getSceneDurationFrames({
+          russianWordTimings: scene.russianWordTimings,
+          englishWordTimings: scene.englishWordTimings,
+          fps,
+          isFirstScene: index === 0,
+        });
 
         return (
           <Series.Sequence
@@ -54,3 +44,4 @@ export const PhraseVideo = () => {
       })}
     </Series>
   );
+};

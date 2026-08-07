@@ -1,3 +1,11 @@
 speech/.venv/
 **/__pycache__/
 *.pyc
+video/public/audio/
+video/public/timings/
+video/public/data/scenes.json
+video/node_modules/
+video/.yarn/
+video/build/
+video/.github/
+content/phrases.json

@@ -13,6 +13,7 @@ import {
   ANSWER_HOLD_SECONDS,
   COUNTDOWN_NUMBERS,
   VISUAL_OFFSET,
+  COUNTDOWN_PAUSE_SECONDS,
 } from "../constants/phrase-video";
 
 export const PhraseScene = ({
@@ -43,7 +44,8 @@ export const PhraseScene = ({
     Math.ceil((introDuration + INTRO_PAUSE_SECONDS) * fps);
 
   const countdownStartFrame =
-    russianAudioStartFrame + Math.ceil(russianDuration * fps);
+    russianAudioStartFrame +
+    Math.ceil((russianDuration + COUNTDOWN_PAUSE_SECONDS) * fps);
 
   const englishAudioStartFrame =
     countdownStartFrame + COUNTDOWN_NUMBERS.length * fps;
