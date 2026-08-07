@@ -1,37 +1,37 @@
 [
   {
     "word": "She",
-    "start": 0.392,
-    "end": 0.513
+    "start": 0.435,
+    "end": 0.556
   },
   {
     "word": "asked",
-    "start": 0.653,
-    "end": 0.834
+    "start": 0.738,
+    "end": 0.96
   },
   {
     "word": "me",
-    "start": 0.874,
-    "end": 0.955
+    "start": 0.98,
+    "end": 1.081
   },
   {
     "word": "not",
-    "start": 0.995,
-    "end": 1.176
+    "start": 1.121,
+    "end": 1.303
   },
   {
     "word": "to",
-    "start": 1.216,
-    "end": 1.276
+    "start": 1.343,
+    "end": 1.424
   },
   {
     "word": "tell",
-    "start": 1.336,
-    "end": 1.517
+    "start": 1.484,
+    "end": 1.727
   },
   {
     "word": "anyone.",
-    "start": 1.617,
-    "end": 1.959
+    "start": 1.828,
+    "end": 2.211
   }
 ]

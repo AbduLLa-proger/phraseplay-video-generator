@@ -1,0 +1,93 @@
+[
+  {
+    "id": "01",
+    "russianWords": [
+      "Она",
+      "попросила",
+      "меня",
+      "никому",
+      "не",
+      "рассказывать."
+    ],
+    "englishWords": [
+      "She",
+      "asked",
+      "me",
+      "not",
+      "to",
+      "tell",
+      "anyone."
+    ],
+    "russianWordTimings": [
+      {
+        "word": "Она",
+        "start": 0.071,
+        "end": 0.232
+      },
+      {
+        "word": "попросила",
+        "start": 0.272,
+        "end": 0.755
+      },
+      {
+        "word": "меня",
+        "start": 0.795,
+        "end": 0.997
+      },
+      {
+        "word": "никому",
+        "start": 1.037,
+        "end": 1.338
+      },
+      {
+        "word": "не",
+        "start": 1.399,
+        "end": 1.459
+      },
+      {
+        "word": "рассказывать.",
+        "start": 1.479,
+        "end": 2.123
+      }
+    ],
+    "englishWordTimings": [
+      {
+        "word": "She",
+        "start": 0.435,
+        "end": 0.556
+      },
+      {
+        "word": "asked",
+        "start": 0.738,
+        "end": 0.96
+      },
+      {
+        "word": "me",
+        "start": 0.98,
+        "end": 1.081
+      },
+      {
+        "word": "not",
+        "start": 1.121,
+        "end": 1.303
+      },
+      {
+        "word": "to",
+        "start": 1.343,
+        "end": 1.424
+      },
+      {
+        "word": "tell",
+        "start": 1.484,
+        "end": 1.727
+      },
+      {
+        "word": "anyone.",
+        "start": 1.828,
+        "end": 2.211
+      }
+    ],
+    "russianAudio": "audio/question-01.wav",
+    "englishAudio": "audio/answer-01.wav"
+  }
+]

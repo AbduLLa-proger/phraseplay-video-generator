@@ -19,6 +19,7 @@ export type TPhraseSceneProps = {
   introAudio: string;
   russianAudio: string;
   englishAudio: string;
+  initialPauseSeconds: number;
 };
 
 export const introWords = ["Переведите", "предложение"];

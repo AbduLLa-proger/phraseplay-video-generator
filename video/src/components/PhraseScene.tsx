@@ -8,7 +8,6 @@ import {
 } from "remotion";
 import {
   type TPhraseSceneProps,
-  SILENCE_SECONDS,
   FONT_FAMILY,
   INTRO_PAUSE_SECONDS,
   ANSWER_HOLD_SECONDS,
@@ -26,6 +25,7 @@ export const PhraseScene = ({
   introAudio,
   russianAudio,
   englishAudio,
+  initialPauseSeconds,
 }: TPhraseSceneProps) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -36,7 +36,7 @@ export const PhraseScene = ({
 
   const englishDuration = englishWordTimings.at(-1)?.end ?? 0;
 
-  const introAudioStartFrame = Math.round(SILENCE_SECONDS * fps);
+  const introAudioStartFrame = Math.round(initialPauseSeconds * fps);
 
   const russianAudioStartFrame =
     introAudioStartFrame +
