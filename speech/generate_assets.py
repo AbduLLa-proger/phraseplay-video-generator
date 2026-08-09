@@ -22,7 +22,7 @@ AUDIO_DIR = ROOT_DIR / "video" / "public" / "audio"
 TIMINGS_DIR = ROOT_DIR / "video" / "public" / "timings"
 SCENES_PATH = ROOT_DIR / "video" / "public" / "data" / "scenes.json"
 
-INTRO_TEXT = "Переведите предложение."
+INTRO_TEXT = "Переведите предложение"
 INTRO_AUDIO_PATH = AUDIO_DIR / "intro-01.wav"
 INTRO_TIMINGS_PATH = TIMINGS_DIR / "intro-01.json"
 
@@ -62,6 +62,50 @@ def get_align_model(language):
         language_code=language,
         device=DEVICE,
     )
+
+# def trim_audio_end(audio_path, seconds=0.1):
+#     result = subprocess.run(
+#         [
+#             "ffprobe",
+#             "-v",
+#             "error",
+#             "-show_entries",
+#             "format=duration",
+#             "-of",
+#             "default=noprint_wrappers=1:nokey=1",
+#             str(audio_path),
+#         ],
+#         capture_output=True,
+#         text=True,
+#         check=True,
+#     )
+
+#     duration = float(result.stdout.strip())
+#     trimmed_duration = duration - seconds
+
+#     if trimmed_duration <= 0:
+#         raise ValueError(f"Audio is too short to trim {seconds} second(s).")
+
+#     temp_path = audio_path.with_name(
+#         f"{audio_path.stem}-trimmed{audio_path.suffix}"
+#     )
+
+#     subprocess.run(
+#         [
+#             "ffmpeg",
+#             "-y",
+#             "-i",
+#             str(audio_path),
+#             "-t",
+#             str(trimmed_duration),
+#             str(temp_path),
+#         ],
+#         check=True,
+#     )
+
+#     temp_path.replace(audio_path)
+
+#     print(f"Trimmed {seconds}s from: {audio_path.name}")
 
 def load_timings(path):
     with open(path, "r", encoding="utf-8") as file:
@@ -234,6 +278,9 @@ def main():
 
         generate_russian_audio(russian, phrase_id)
 
+        # russian_audio_path = AUDIO_DIR / f"question-{phrase_id}.wav"
+
+        # trim_audio_end(russian_audio_path, seconds=0.1)
 
         generate_english_audio(
             english_pipeline,
