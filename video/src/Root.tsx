@@ -23,8 +23,8 @@ export const RemotionRoot = () => {
       component={PhraseVideo}
       durationInFrames={durationInFrames}
       fps={FPS}
-      width={720}
-      height={1280}
+      width={1080}
+      height={1920}
     />
   );
 };

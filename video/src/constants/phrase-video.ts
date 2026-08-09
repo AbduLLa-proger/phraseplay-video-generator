@@ -123,8 +123,9 @@ export const englishWordTimings = [
   },
 ];
 
+export const LAST_RUSSIAN_WORD_HOLD_SECONDS = 0.5;
 export const ANSWER_HOLD_SECONDS = 2;
-export const COUNTDOWN_PAUSE_SECONDS = 0.4;
+export const COUNTDOWN_PAUSE_SECONDS = 0.7;
 export const INTRO_PAUSE_SECONDS = 0.2;
 export const SILENCE_SECONDS = 0.5;
 export const COUNTDOWN_NUMBERS = [5, 4, 3, 2, 1];

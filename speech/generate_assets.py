@@ -63,49 +63,49 @@ def get_align_model(language):
         device=DEVICE,
     )
 
-# def trim_audio_end(audio_path, seconds=0.1):
-#     result = subprocess.run(
-#         [
-#             "ffprobe",
-#             "-v",
-#             "error",
-#             "-show_entries",
-#             "format=duration",
-#             "-of",
-#             "default=noprint_wrappers=1:nokey=1",
-#             str(audio_path),
-#         ],
-#         capture_output=True,
-#         text=True,
-#         check=True,
-#     )
+def trim_audio_end(audio_path, seconds=0.25):
+    result = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
+            str(audio_path),
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
 
-#     duration = float(result.stdout.strip())
-#     trimmed_duration = duration - seconds
+    duration = float(result.stdout.strip())
+    trimmed_duration = duration - seconds
 
-#     if trimmed_duration <= 0:
-#         raise ValueError(f"Audio is too short to trim {seconds} second(s).")
+    if trimmed_duration <= 0:
+        raise ValueError(f"Audio is too short to trim {seconds} second(s).")
 
-#     temp_path = audio_path.with_name(
-#         f"{audio_path.stem}-trimmed{audio_path.suffix}"
-#     )
+    temp_path = audio_path.with_name(
+        f"{audio_path.stem}-trimmed{audio_path.suffix}"
+    )
 
-#     subprocess.run(
-#         [
-#             "ffmpeg",
-#             "-y",
-#             "-i",
-#             str(audio_path),
-#             "-t",
-#             str(trimmed_duration),
-#             str(temp_path),
-#         ],
-#         check=True,
-#     )
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(audio_path),
+            "-t",
+            str(trimmed_duration),
+            str(temp_path),
+        ],
+        check=True,
+    )
 
-#     temp_path.replace(audio_path)
+    temp_path.replace(audio_path)
 
-#     print(f"Trimmed {seconds}s from: {audio_path.name}")
+    print(f"Trimmed {seconds}s from: {audio_path.name}")
 
 def load_timings(path):
     with open(path, "r", encoding="utf-8") as file:
@@ -161,7 +161,7 @@ def load_english_pipeline():
     return KPipeline(lang_code="a")
 
 def ensure_intro_assets():
-    if not INTRO_AUDIO_PATH.parent.exists():
+    if not INTRO_AUDIO_PATH.exists():
         mp3_path = AUDIO_DIR / "intro-01.mp3"
         audio = elevenlabs_client.text_to_speech.convert(
             voice_id=ELEVENLABS_VOICE_ID,
@@ -278,9 +278,9 @@ def main():
 
         generate_russian_audio(russian, phrase_id)
 
-        # russian_audio_path = AUDIO_DIR / f"question-{phrase_id}.wav"
+        russian_audio_path = AUDIO_DIR / f"question-{phrase_id}.wav"
 
-        # trim_audio_end(russian_audio_path, seconds=0.1)
+        trim_audio_end(russian_audio_path, seconds=0.25)
 
         generate_english_audio(
             english_pipeline,
@@ -288,7 +288,6 @@ def main():
             phrase_id,
         )
 
-        russian_audio_path = AUDIO_DIR / f"question-{phrase_id}.wav"
         english_audio_path = AUDIO_DIR / f"answer-{phrase_id}.wav"
 
         russian_timings_path = TIMINGS_DIR / f"question-{phrase_id}.json"

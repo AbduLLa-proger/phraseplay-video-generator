@@ -14,6 +14,7 @@ import {
   COUNTDOWN_NUMBERS,
   VISUAL_OFFSET,
   COUNTDOWN_PAUSE_SECONDS,
+  LAST_RUSSIAN_WORD_HOLD_SECONDS,
 } from "../constants/phrase-video";
 
 export const PhraseScene = ({
@@ -68,8 +69,17 @@ export const PhraseScene = ({
   );
 
   const activeRussianWordIndex = russianWordTimings.findIndex(
-    (timing) =>
-      russianTime >= timing.start - VISUAL_OFFSET && russianTime < timing.end,
+    (timing, index) => {
+      const isLaswWord = index === russianWordTimings.length - 1;
+
+      const endTime = isLaswWord
+        ? timing.end + LAST_RUSSIAN_WORD_HOLD_SECONDS
+        : timing.end;
+
+      return (
+        russianTime >= timing.start - VISUAL_OFFSET && russianTime < endTime
+      );
+    },
   );
 
   const activeEnglishWordIndex = englishWordTimings.findIndex(
@@ -130,7 +140,7 @@ export const PhraseScene = ({
               justifyContent: "center",
               flexWrap: "wrap",
               gap: 10,
-              fontSize: 55,
+              fontSize: 80,
               fontWeight: 700,
               textAlign: "center",
               marginBottom: 20,
@@ -159,10 +169,8 @@ export const PhraseScene = ({
               flexWrap: "wrap",
               justifyContent: "center",
               gap: 12,
-              maxWidth: 620,
-              minHeight: 150,
               marginBottom: 50,
-              fontSize: 55,
+              fontSize: 80,
               fontFamily: FONT_FAMILY,
               lineHeight: 1.35,
               textAlign: "center",
@@ -188,7 +196,6 @@ export const PhraseScene = ({
 
         <div
           style={{
-            minHeight: 110,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -200,7 +207,7 @@ export const PhraseScene = ({
                 display: "flex",
                 justifyContent: "center",
                 gap: 45,
-                fontSize: 74,
+                fontSize: 90,
                 fontWeight: 700,
                 lineHeight: 1,
               }}
@@ -226,7 +233,6 @@ export const PhraseScene = ({
         </div>
         <div
           style={{
-            minHeight: 145,
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "center",
@@ -238,8 +244,7 @@ export const PhraseScene = ({
               flexWrap: "wrap",
               justifyContent: "center",
               gap: 14,
-              maxWidth: 620,
-              fontSize: 55,
+              fontSize: 80,
               fontFamily: FONT_FAMILY,
               lineHeight: 1.35,
               textAlign: "center",
