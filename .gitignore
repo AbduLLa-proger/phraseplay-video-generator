@@ -9,3 +9,6 @@ video/.yarn/
 video/build/
 video/.github/
 content/phrases.json
+.env
+speech/*.mp3
+speech/voice-tests/*.wav
