@@ -13,3 +13,10 @@ export type TPhraseSceneData = {
   russianAudio: string;
   englishAudio: string;
 };
+
+export type TVideoIntroProps = {
+  levelAudio: string;
+  countAudio: string;
+  levelWordTimings: TWordTiming[];
+  countWordTimings: TWordTiming[];
+};

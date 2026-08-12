@@ -11,20 +11,31 @@ from elevenlabs.client import ElevenLabs
 from kokoro import KPipeline
 
 DEVICE = "cpu"
-COMPUTE_TYPE = "int8"
-WHISPER_MODEL = "tiny"
-MAX_WORDS = 12
+MAX_WORDS = 15
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
 PHRASES_PATH = ROOT_DIR / "content" / "phrases.json"
 AUDIO_DIR = ROOT_DIR / "video" / "public" / "audio"
+
+QUESTION_AUDIO_DIR = AUDIO_DIR / "question"
+ANSWER_AUDIO_DIR = AUDIO_DIR / "answer"
+
 TIMINGS_DIR = ROOT_DIR / "video" / "public" / "timings"
+
+QUESTION_TIMINGS_DIR = TIMINGS_DIR / "question"
+ANSWER_TIMINGS_DIR = TIMINGS_DIR / "answer"
+
+LEVEL_TIMINGS_DIR = TIMINGS_DIR / "level"
+INTRO_TIMINGS_DIR = TIMINGS_DIR / "intro"
+
 SCENES_PATH = ROOT_DIR / "video" / "public" / "data" / "scenes.json"
 
-INTRO_TEXT = "Переведите предложение"
-INTRO_AUDIO_PATH = AUDIO_DIR / "intro-01.wav"
-INTRO_TIMINGS_PATH = TIMINGS_DIR / "intro-01.json"
+QUESTION_AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+ANSWER_AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+
+QUESTION_TIMINGS_DIR.mkdir(parents=True, exist_ok=True)
+ANSWER_TIMINGS_DIR.mkdir(parents=True, exist_ok=True)
 
 load_dotenv()
 
@@ -41,18 +52,6 @@ SCENES_PATH.parent.mkdir(
 elevenlabs_client = ElevenLabs(
     api_key=os.getenv("ELEVENLABS_API_KEY"),
 )
-
-@lru_cache(maxsize=2)
-def get_whisper_model(language):
-    print(f"Loading Whisper model for {language}...")
-
-    return whisperx.load_model(
-        WHISPER_MODEL,
-        DEVICE,
-        compute_type=COMPUTE_TYPE,
-        language=language,
-    )
-
 
 @lru_cache(maxsize=2)
 def get_align_model(language):
@@ -111,20 +110,23 @@ def load_timings(path):
     with open(path, "r", encoding="utf-8") as file:
         return json.load(file)
 
-def generate_word_timings(audio_path, language, output_path):
-    model = get_whisper_model(language)
-
+def generate_word_timings(audio_path, language, text, output_path):
     audio = whisperx.load_audio(str(audio_path))
 
-    result = model.transcribe(
-        audio,
-        batch_size=4,
-    )
+    duration = len(audio) / 16000
+
+    segments = [
+        {
+            "text": text,
+            "start": 0.0,
+            "end": duration
+        }
+    ]
 
     align_model, metadata = get_align_model(language)
 
     aligned_result = whisperx.align(
-        result["segments"],
+        segments,
         align_model,
         metadata,
         audio,
@@ -160,45 +162,8 @@ def generate_word_timings(audio_path, language, output_path):
 def load_english_pipeline():
     return KPipeline(lang_code="a")
 
-def ensure_intro_assets():
-    if not INTRO_AUDIO_PATH.exists():
-        mp3_path = AUDIO_DIR / "intro-01.mp3"
-        audio = elevenlabs_client.text_to_speech.convert(
-            voice_id=ELEVENLABS_VOICE_ID,
-            text=INTRO_TEXT,
-            model_id=ELEVENLABS_MODEL_ID,
-            output_format="mp3_44100_128",
-        )
-        with open(mp3_path, 'wb') as file:
-            for chunk in audio:
-                file.write(chunk)
-
-        subprocess.run(
-            [
-                "ffmpeg",
-                "-y",
-                "-i",
-                str(mp3_path),
-                str(INTRO_AUDIO_PATH),
-            ],
-            check=True,
-        )
-
-        mp3_path.unlink()
-        print(f"Intro audio generated")
-
-    if not INTRO_TIMINGS_PATH.exists():
-        generate_word_timings(
-            INTRO_AUDIO_PATH,
-            "ru",
-            INTRO_TIMINGS_PATH,
-        )
-        print(f"Intro timings generated")
-
-    print("Intro assets generated.")
-
 def generate_english_audio(pipeline, text, phrase_id):
-    output_path = AUDIO_DIR / f"answer-{phrase_id}.wav"
+    output_path = ANSWER_AUDIO_DIR / f"answer-{phrase_id}.wav"
 
     generator = pipeline(
         text,
@@ -216,15 +181,15 @@ def generate_english_audio(pipeline, text, phrase_id):
 
     print(f"EN audio: {output_path.name}")
 
-def load_phrases():
+def load_content():
     with open(PHRASES_PATH, "r", encoding="utf-8") as file:
         return json.load(file)
 
 
 def generate_russian_audio(text, phrase_id):
 
-    mp3_path = AUDIO_DIR / f"question-{phrase_id}.mp3"
-    wav_path = AUDIO_DIR / f"question-{phrase_id}.wav"
+    mp3_path = QUESTION_AUDIO_DIR / f"question-{phrase_id}.mp3"
+    wav_path = QUESTION_AUDIO_DIR / f"question-{phrase_id}.wav"
 
     audio = elevenlabs_client.text_to_speech.convert(
         voice_id=ELEVENLABS_VOICE_ID,
@@ -247,10 +212,45 @@ def generate_russian_audio(text, phrase_id):
 
 
 def main():
-    phrases = load_phrases()
-    english_pipeline = load_english_pipeline()
+    content = load_content()
 
-    ensure_intro_assets()
+    level = content["level"]
+    phrases = content["phrases"]
+    phrase_count = len(phrases)
+    normalized_level = level.lower()
+
+    level_audio = f"audio/level/level-{normalized_level}.wav"
+    count_intro_audio = f"audio/intro/phrases-{phrase_count}.wav"
+
+    level_timings_path = (
+        LEVEL_TIMINGS_DIR
+        / f"level-{normalized_level}.json"
+    )
+
+    count_intro_timings_path = (
+        INTRO_TIMINGS_DIR
+        / f"phrases-{phrase_count}.json"
+    )
+
+    if not level_timings_path.exists():
+        raise FileNotFoundError(
+            f"Level timings not found: {level_timings_path}"
+    )
+
+    if not count_intro_timings_path.exists():
+        raise FileNotFoundError(
+            f"Count intro timings not found: "
+            f"{count_intro_timings_path}"
+        )
+
+    level_word_timings = load_timings(
+        level_timings_path
+    )
+
+    count_word_timings = load_timings(
+        count_intro_timings_path
+    )
+    english_pipeline = load_english_pipeline()
 
     scenes = []
 
@@ -278,7 +278,7 @@ def main():
 
         generate_russian_audio(russian, phrase_id)
 
-        russian_audio_path = AUDIO_DIR / f"question-{phrase_id}.wav"
+        russian_audio_path = QUESTION_AUDIO_DIR / f"question-{phrase_id}.wav"
 
         trim_audio_end(russian_audio_path, seconds=0.25)
 
@@ -288,20 +288,22 @@ def main():
             phrase_id,
         )
 
-        english_audio_path = AUDIO_DIR / f"answer-{phrase_id}.wav"
+        english_audio_path = ANSWER_AUDIO_DIR / f"answer-{phrase_id}.wav"
 
-        russian_timings_path = TIMINGS_DIR / f"question-{phrase_id}.json"
-        english_timings_path = TIMINGS_DIR / f"answer-{phrase_id}.json"
+        russian_timings_path = QUESTION_TIMINGS_DIR / f"question-{phrase_id}.json"
+        english_timings_path = ANSWER_TIMINGS_DIR / f"answer-{phrase_id}.json"
 
         generate_word_timings(
             russian_audio_path,
             "ru",
+            russian,
             russian_timings_path,
         )
 
         generate_word_timings(
             english_audio_path,
             "en",
+            english,
             english_timings_path,
         )
 
@@ -326,12 +328,24 @@ def main():
                 ],
                 "russianWordTimings": russian_timings,
                 "englishWordTimings": english_timings,
-                "russianAudio": f"audio/question-{phrase_id}.wav",
-                "englishAudio": f"audio/answer-{phrase_id}.wav",
+                "russianAudio": f"audio/question/question-{phrase_id}.wav",
+                "englishAudio": f"audio/answer/answer-{phrase_id}.wav",
             }
         )
 
-    with open( SCENES_PATH, "w", encoding="utf-8") as file: json.dump(scenes,file,ensure_ascii=False,indent=2)
+    video_data = {
+    "level": level,
+    "phraseCount": phrase_count,
+    "intro": {
+        "levelAudio": level_audio,
+        "levelWordTimings": level_word_timings,
+        "countAudio": count_intro_audio,
+        "countWordTimings": count_word_timings,
+    },
+    "scenes": scenes,
+    }
+
+    with open(SCENES_PATH, "w", encoding="utf-8") as file: json.dump(video_data,file,ensure_ascii=False,indent=2)
 
     print(f"\nScenes: {SCENES_PATH.name}")
 
