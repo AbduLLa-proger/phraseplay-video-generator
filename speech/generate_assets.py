@@ -17,15 +17,15 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 
 PHRASES_PATH = ROOT_DIR / "content" / "phrases.json"
 AUDIO_DIR = ROOT_DIR / "video" / "public" / "audio"
+TIMINGS_DIR = ROOT_DIR / "video" / "public" / "timings"
 
 QUESTION_AUDIO_DIR = AUDIO_DIR / "question"
 ANSWER_AUDIO_DIR = AUDIO_DIR / "answer"
-
-TIMINGS_DIR = ROOT_DIR / "video" / "public" / "timings"
+LEVEL_AUDIO_DIR = AUDIO_DIR / "level"
+INTRO_AUDIO_DIR = AUDIO_DIR / "intro"
 
 QUESTION_TIMINGS_DIR = TIMINGS_DIR / "question"
 ANSWER_TIMINGS_DIR = TIMINGS_DIR / "answer"
-
 LEVEL_TIMINGS_DIR = TIMINGS_DIR / "level"
 INTRO_TIMINGS_DIR = TIMINGS_DIR / "intro"
 
@@ -216,31 +216,50 @@ def main():
 
     level = content["level"]
     phrases = content["phrases"]
-    phrase_count = len(phrases)
+
+    phrases_count = len(phrases)
     normalized_level = level.lower()
 
     level_audio = f"audio/level/level-{normalized_level}.wav"
-    count_intro_audio = f"audio/intro/phrases-{phrase_count}.wav"
+    count_intro_audio = f"audio/intro/phrases-{phrases_count}.wav"
+
+    level_audio_path = (
+        LEVEL_AUDIO_DIR / f"level-{normalized_level}.wav"
+    )
 
     level_timings_path = (
         LEVEL_TIMINGS_DIR
         / f"level-{normalized_level}.json"
     )
 
+
+    count_intro_audio_path = (
+        INTRO_AUDIO_DIR / f"phrases-{phrases_count}.wav"
+    )
+
     count_intro_timings_path = (
         INTRO_TIMINGS_DIR
-        / f"phrases-{phrase_count}.json"
+        / f"phrases-{phrases_count}.json"
+    )
+
+    if not level_audio_path.exists():
+        raise FileNotFoundError(
+            f"Level intro audio not found: {level_audio_path}"
     )
 
     if not level_timings_path.exists():
         raise FileNotFoundError(
-            f"Level timings not found: {level_timings_path}"
-    )
+            f"Level intro timings not found: {level_timings_path}"
+        )
+
+    if not count_intro_audio_path.exists():
+        raise FileNotFoundError(
+            f"Count intro audio not found: {count_intro_audio_path}"
+        )
 
     if not count_intro_timings_path.exists():
         raise FileNotFoundError(
-            f"Count intro timings not found: "
-            f"{count_intro_timings_path}"
+            f"Count intro timings not found: {count_intro_timings_path}"
         )
 
     level_word_timings = load_timings(
@@ -335,7 +354,7 @@ def main():
 
     video_data = {
     "level": level,
-    "phraseCount": phrase_count,
+    "phraseCount": phrases_count,
     "intro": {
         "levelAudio": level_audio,
         "levelWordTimings": level_word_timings,

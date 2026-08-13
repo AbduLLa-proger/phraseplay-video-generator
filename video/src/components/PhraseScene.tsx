@@ -7,7 +7,6 @@ import {
   useVideoConfig,
 } from "remotion";
 import {
-  type TPhraseSceneProps,
   FONT_FAMILY,
   ANSWER_HOLD_SECONDS,
   COUNTDOWN_NUMBERS,
@@ -15,6 +14,7 @@ import {
   COUNTDOWN_PAUSE_SECONDS,
   LAST_RUSSIAN_WORD_HOLD_SECONDS,
 } from "../constants/phrase-video";
+import type { TPhraseSceneProps } from "../types/phrase";
 
 export const PhraseScene = ({
   russianWords,
@@ -117,7 +117,7 @@ export const PhraseScene = ({
               display: "flex",
               justifyContent: "center",
               flexWrap: "wrap",
-              gap: 10,
+              gap: 20,
               fontSize: 90,
               fontWeight: 700,
               textAlign: "center",
@@ -155,7 +155,7 @@ export const PhraseScene = ({
               style={{
                 display: "flex",
                 justifyContent: "center",
-                gap: 55,
+                gap: 65,
                 fontSize: 105,
                 fontWeight: 700,
                 lineHeight: 1,
@@ -192,7 +192,7 @@ export const PhraseScene = ({
               display: "flex",
               flexWrap: "wrap",
               justifyContent: "center",
-              gap: 14,
+              gap: 25,
               fontSize: 85,
               fontFamily: FONT_FAMILY,
               lineHeight: 1.35,

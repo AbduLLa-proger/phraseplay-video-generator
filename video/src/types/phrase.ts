@@ -4,6 +4,17 @@ export type TWordTiming = {
   end: number;
 };
 
+export type TPhraseSceneProps = {
+  russianWords: string[];
+  englishWords: string[];
+
+  russianWordTimings: TWordTiming[];
+  englishWordTimings: TWordTiming[];
+
+  russianAudio: string;
+  englishAudio: string;
+};
+
 export type TPhraseSceneData = {
   id: string;
   russianWords: string[];
