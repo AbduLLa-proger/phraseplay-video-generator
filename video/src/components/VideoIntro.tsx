@@ -31,7 +31,10 @@ export const VideoIntro = ({
   const levelAudioStartFrame = introPauseFrames;
 
   const countAudioStartFrame =
-    levelAudioStartFrame + Math.ceil(levelDuration * fps) + introPauseFrames;
+    levelAudioStartFrame +
+    Math.ceil(levelDuration * fps) +
+    introPauseFrames +
+    6.2;
 
   const levelTime = (frame - levelAudioStartFrame) / fps;
 

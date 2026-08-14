@@ -1,25 +1,8 @@
 import { loadFont } from "@remotion/google-fonts/Montserrat";
 const { fontFamily } = loadFont();
 
-type TWordTiming = {
-  word: string;
-  start: number;
-  end: number;
-};
-
-export type TPhraseSceneProps = {
-  russianWords: string[];
-  englishWords: string[];
-
-  russianWordTimings: TWordTiming[];
-  englishWordTimings: TWordTiming[];
-
-  russianAudio: string;
-  englishAudio: string;
-};
-
 export const HOLD_DURATION_FOR_FIVE_WORDS = 0.8;
-export const FIRST_INTRO_WORD_HOLD_SECONDS = 0.6;
+export const FIRST_INTRO_WORD_HOLD_SECONDS = 0.7;
 export const SECOND_INTRO_WORD_HOLD_SECONDS = 0.8;
 export const LAST_RUSSIAN_WORD_HOLD_SECONDS = 0.5;
 export const VIDEO_INTRO_PAUSE_SECONDS = 0.4;

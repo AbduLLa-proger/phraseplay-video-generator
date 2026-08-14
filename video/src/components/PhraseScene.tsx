@@ -15,6 +15,7 @@ import {
   LAST_RUSSIAN_WORD_HOLD_SECONDS,
 } from "../constants/phrase-video";
 import type { TPhraseSceneProps } from "../types/phrase";
+import { getDynamicFontSize } from "../utils/get-dynamic-font-size";
 
 export const PhraseScene = ({
   russianWords,
@@ -90,7 +91,9 @@ export const PhraseScene = ({
         fontFamily: FONT_FAMILY,
         justifyContent: "space-between",
         alignItems: "center",
-        padding: 60,
+        padding: 70,
+        paddingTop: 90,
+        paddingBottom: 90,
         height: "100%",
       }}
     >
@@ -118,7 +121,7 @@ export const PhraseScene = ({
               justifyContent: "center",
               flexWrap: "wrap",
               gap: 20,
-              fontSize: 90,
+              fontSize: getDynamicFontSize(russianWords.length),
               fontWeight: 700,
               textAlign: "center",
               marginBottom: 20,
@@ -193,7 +196,7 @@ export const PhraseScene = ({
               flexWrap: "wrap",
               justifyContent: "center",
               gap: 25,
-              fontSize: 85,
+              fontSize: getDynamicFontSize(englishWords.length),
               fontFamily: FONT_FAMILY,
               lineHeight: 1.35,
               textAlign: "center",
