@@ -25,7 +25,10 @@ export type TPhraseSceneData = {
   englishAudio: string;
 };
 
+export type TEnglishLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+
 export type TVideoIntroProps = {
+  level: TEnglishLevel;
   levelAudio: string;
   countAudio: string;
   levelWordTimings: TWordTiming[];

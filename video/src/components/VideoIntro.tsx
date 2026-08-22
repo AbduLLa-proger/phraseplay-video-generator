@@ -12,10 +12,13 @@ import {
   VIDEO_INTRO_PAUSE_SECONDS,
   FIRST_INTRO_WORD_HOLD_SECONDS,
   SECOND_INTRO_WORD_HOLD_SECONDS,
+  A1A2_LEVEL_HOLD_SECONDS,
+  B1B2C1C2_LEVEL_HOLD_SECONDS,
 } from "../constants/phrase-video";
 import type { TVideoIntroProps } from "../types/phrase";
 
 export const VideoIntro = ({
+  level,
   levelAudio,
   countAudio,
   levelWordTimings,
@@ -30,12 +33,13 @@ export const VideoIntro = ({
 
   const levelAudioStartFrame = introPauseFrames;
 
-  const countAudioStartFrame =
-    levelAudioStartFrame +
-    Math.ceil(levelDuration * fps) +
-    introPauseFrames +
-    6.2;
+  const levelHoldSeconds =
+    level === "A1" || level === "A2"
+      ? A1A2_LEVEL_HOLD_SECONDS
+      : B1B2C1C2_LEVEL_HOLD_SECONDS;
 
+  const countAudioStartFrame =
+    levelAudioStartFrame + levelHoldSeconds + Math.ceil(levelDuration * fps);
   const levelTime = (frame - levelAudioStartFrame) / fps;
 
   const countTime = (frame - countAudioStartFrame) / fps;

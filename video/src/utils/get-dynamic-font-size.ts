@@ -1,19 +1,35 @@
-export const getDynamicFontSize = (wordCount: number) => {
-  if (wordCount <= 10) {
-    return 95;
+export const getDynamicFontSize = (words: string[]) => {
+  const wordCount = words.length;
+
+  const longestWordLength = Math.max(...words.map((word) => word.length), 0);
+
+  const totalCharacters = words.reduce((total, word) => total + word.length, 0);
+
+  let fontSize = 100;
+
+  if (wordCount >= 6) {
+    fontSize = 95;
   }
 
-  if (wordCount <= 14) {
-    return 88;
+  if (wordCount >= 9) {
+    fontSize = 90;
   }
 
-  if (wordCount <= 18) {
-    return 80;
+  if (wordCount >= 12) {
+    fontSize = 87;
   }
 
-  if (wordCount <= 22) {
-    return 75;
+  if (longestWordLength >= 12) {
+    fontSize -= 4;
   }
 
-  return 75;
+  if (longestWordLength >= 16) {
+    fontSize -= 4;
+  }
+
+  if (totalCharacters >= 70) {
+    fontSize -= 4;
+  }
+
+  return Math.max(fontSize, 60);
 };

@@ -9,12 +9,16 @@ import {
   VIDEO_INTRO_PAUSE_SECONDS,
   HOLD_DURATION_FOR_FIVE_WORDS,
 } from "./constants/phrase-video";
-import type { TPhraseSceneData, TWordTiming } from "./types/phrase";
+import type {
+  TPhraseSceneData,
+  TWordTiming,
+  TEnglishLevel,
+} from "./types/phrase";
 
 export const PhraseVideo = () => {
   const { fps } = useVideoConfig();
 
-  const { intro, scenes } = scenesData;
+  const { intro, scenes, level } = scenesData;
 
   const levelWordTimings = intro.levelWordTimings as TWordTiming[];
 
@@ -37,6 +41,7 @@ export const PhraseVideo = () => {
     <Series>
       <Series.Sequence durationInFrames={introDurationFrames}>
         <VideoIntro
+          level={level as TEnglishLevel}
           levelAudio={intro.levelAudio}
           countAudio={intro.countAudio}
           levelWordTimings={levelWordTimings}
