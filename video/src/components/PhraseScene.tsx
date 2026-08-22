@@ -7,7 +7,6 @@ import {
   useVideoConfig,
 } from "remotion";
 import {
-  FONT_FAMILY,
   ANSWER_HOLD_SECONDS,
   COUNTDOWN_NUMBERS,
   VISUAL_OFFSET,
@@ -15,6 +14,7 @@ import {
   LAST_RUSSIAN_WORD_HOLD_SECONDS,
 } from "../constants/phrase-video";
 import type { TPhraseSceneProps } from "../types/phrase";
+import { phraseVideoStyles } from "../styles/phrase-video";
 import { getDynamicFontSize } from "../utils/get-dynamic-font-size";
 
 export const PhraseScene = ({
@@ -84,28 +84,8 @@ export const PhraseScene = ({
   const showEnglish = frame >= englishAudioStartFrame && frame < sceneEndFrame;
 
   return (
-    <AbsoluteFill
-      style={{
-        display: "flex",
-        background: "#d9d9d9",
-        fontFamily: FONT_FAMILY,
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: 70,
-        paddingTop: 90,
-        paddingBottom: 90,
-        height: "100%",
-      }}
-    >
-      <div
-        style={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+    <AbsoluteFill style={phraseVideoStyles.phraseContainer}>
+      <div style={phraseVideoStyles.phraseContent}>
         <Sequence from={russianAudioStartFrame}>
           <Audio src={staticFile(russianAudio)} />
         </Sequence>
@@ -117,15 +97,8 @@ export const PhraseScene = ({
         <div>
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              flexWrap: "wrap",
-              gap: 20,
+              ...phraseVideoStyles.russianText,
               fontSize: getDynamicFontSize(russianWords),
-              fontWeight: 700,
-              textAlign: "center",
-              marginBottom: 20,
-              fontFamily: FONT_FAMILY,
             }}
           >
             {russianWords.map((word, index) => {
@@ -146,24 +119,9 @@ export const PhraseScene = ({
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <div style={phraseVideoStyles.countdownWrapper}>
           {showCountdown && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: 65,
-                fontSize: 105,
-                fontWeight: 700,
-                lineHeight: 1,
-              }}
-            >
+            <div style={phraseVideoStyles.countdown}>
               {COUNTDOWN_NUMBERS.map((number, index) => {
                 const isActive = index === activeCountdownIndex;
 
@@ -183,23 +141,11 @@ export const PhraseScene = ({
             </div>
           )}
         </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-          }}
-        >
+        <div style={phraseVideoStyles.englishWrapper}>
           <div
             style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: 25,
+              ...phraseVideoStyles.englishText,
               fontSize: getDynamicFontSize(englishWords),
-              fontFamily: FONT_FAMILY,
-              lineHeight: 1.35,
-              textAlign: "center",
               opacity: showEnglish ? 1 : 0,
             }}
           >

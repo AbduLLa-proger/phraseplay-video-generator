@@ -15,6 +15,7 @@ import {
   A1A2_LEVEL_HOLD_SECONDS,
   B1B2C1C2_LEVEL_HOLD_SECONDS,
 } from "../constants/phrase-video";
+import { phraseVideoStyles } from "../styles/phrase-video";
 import type { TVideoIntroProps } from "../types/phrase";
 
 export const VideoIntro = ({
@@ -69,22 +70,7 @@ export const VideoIntro = ({
   const countWords = countWordTimings.map(({ word }) => word);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        width: "100%",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 44,
-        padding: 60,
-        boxSizing: "border-box",
-        backgroundColor: "#d9d9d9",
-        color: "#000",
-        fontWeight: 700,
-        textAlign: "center",
-      }}
-    >
+    <div style={phraseVideoStyles.introContainer}>
       {levelWords.map((word, index) => (
         <span
           key={`${word}-${index}`}
